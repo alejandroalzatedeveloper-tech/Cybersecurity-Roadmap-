@@ -1,0 +1,11 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Scratch files from the build/test loop
+_audit*
+_seedtest*
+_seentest*
+*.tmp
+*.log
