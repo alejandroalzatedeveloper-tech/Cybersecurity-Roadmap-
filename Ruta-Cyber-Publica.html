@@ -292,6 +292,16 @@ html[data-tema="lector"] mark{background:rgba(255,179,0,.55)}
   .brand small{display:none}
 }
 
+/* Modo PDF en pantalla: se usa cuando el botón "PDF" construye el
+   documento. Oculta la app sin borrarla del DOM, para poder volver. */
+body.modo-pdf .topbar,body.modo-pdf .layout{display:none}
+body.modo-pdf #docall{display:block}
+.volver{position:sticky;top:0;z-index:60;background:var(--bg);padding:12px 0 4px;
+        border-bottom:1px solid var(--line);margin-bottom:8px}
+.volver button{background:var(--bg2);color:var(--txt);border:1px solid var(--line);
+        border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit;font-size:13px}
+.volver button:hover{border-color:var(--acc)}
+
 /* ═══════════ PRINT / PDF ═══════════ */
 @media print{
   @page{size:A4;margin:16mm 14mm 18mm}
@@ -1073,9 +1083,14 @@ $('#reset').addEventListener('click',()=>{
   save(); pintar(); toast('Progreso reiniciado');
 });
 $('#pdf').addEventListener('click',()=>{
-  toast('En el diálogo elige «Guardar como PDF»');
+  // Sin esto el PDF salía en blanco: @media print esconde #app y
+  // muestra #docall, que solo se rellena en modoImprimir().
+  modoImprimir();
+  toast('En el diálogo elige "Guardar como PDF"');
   setTimeout(()=>window.print(), 400);
 });
+// Ctrl+P tambien genera el documento completo
+window.addEventListener('beforeprint',()=>{ modoImprimir(); });
 $('#menu').addEventListener('click',()=>$('#sb').classList.toggle('open'));
 document.addEventListener('keydown',e=>{
   const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
@@ -1093,10 +1108,15 @@ window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(BY
    MODO IMPRESIÓN / PDF
    ════════════════════════════════════════════════════════════════ */
 function modoImprimir(){
-  document.querySelector('.topbar').remove();
-  document.querySelector('.layout').remove();
+  // Idempotente: se puede llamar desde el botón, desde Ctrl+P y al
+  // cargar con ?imprimir=1 sin duplicar contenido.
+  if(document.body.classList.contains('modo-pdf')) return;
+  document.body.classList.add('modo-pdf');
   const dc = $('#docall');
-  let h = '<div class="portada"><h1>RUTA CYBERSEGURIDAD<br>De Nivel 0 a Senior</h1>'+
+  // No se borra .topbar ni .layout: se ocultan por CSS. Así, si el
+  // usuario cancela el diálogo de impresión, la app sigue intacta.
+  let h = '<div class="volver no-print"><button id="salirpdf">&larr; Volver a la aplicaci&oacute;n</button></div>';
+  h += '<div class="portada"><h1>RUTA CYBERSEGURIDAD<br>De Nivel 0 a Senior</h1>'+
     '<p>Plan de estudio completo en 5 fases · 52 semanas · ≈2.700 horas · 3 documentos · labs, checklists y recursos.</p>'+
     '<p style="margin-top:8px"><span class="tag">FASE 0 CIMIENTOS</span> <span class="tag">FASE 1 PRINCIPIANTE</span> <span class="tag">FASE 2 INTERMEDIO</span> <span class="tag">FASE 3 AVANZADO</span> <span class="tag">FASE 4 SENIOR</span></p>'+
     '<p style="margin-top:10px;font-size:10pt;color:#555">Regla 30/50/20 — 30 % teoría, 50 % práctica, 20 % escritura. Todo el material es de uso educativo y de laboratorio autorizado.</p></div>';
@@ -1117,6 +1137,13 @@ function modoImprimir(){
          '<span><span class="pf">'+et+'</span> · '+(v.n? v.n+' objetivos':'')+'</span></div>'+v.cuerpo+'</div>';
   });
   dc.innerHTML = h;
+  const b = $('#salirpdf');
+  if(b) b.addEventListener('click', salirModoImprimir);
+}
+function salirModoImprimir(){
+  document.body.classList.remove('modo-pdf');
+  $('#docall').innerHTML = '';
+  pintar();
 }
 if(ES_IMPRIMIR) modoImprimir();
 else { setTema(E.tema||'cyber'); pintar(); }
