@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="cyber">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ruta-clave" content="@@CLAVE@@">
+<title>RUTA CYBER · De Nivel 0 a Senior</title>
+<meta name="description" content="Ruta de estudio de ciberseguridad de nivel 0 a senior: plan de 52 semanas, checklists, labs y recursos.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TOKENS
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#05070c; --bg2:#080c15; --bg3:#0d1421; --panel:#0b1119; --panel2:#0f1723;
+  --line:#1a2438; --line2:#243450; --line3:#2f4265;
+  --txt:#d8e2f0; --dim:#93a4bd; --mute:#63748f;
+  --cyan:#00e5ff; --cyan2:#0aa8c4; --mag:#ff2e88; --vio:#a855f7;
+  --amb:#ffb300; --grn:#00ff9c; --red:#ff3b5c;
+  --sans:'Segoe UI',system-ui,-apple-system,Roboto,'Inter',sans-serif;
+  --mono:'Cascadia Code','JetBrains Mono','Fira Code',Consolas,monospace;
+  --r:4px; --sw:270px; --th:54px;
+  --shadow:0 0 0 1px var(--line),0 10px 40px -12px rgba(0,0,0,.9);
+  --glow:0 0 18px -2px var(--cyan);
+}
+html[data-tema="lector"]{
+  --bg:#f6f3ec; --bg2:#fffdf8; --bg3:#ffffff; --panel:#ffffff; --panel2:#faf8f3;
+  --line:#e3ddd1; --line2:#d3cabb; --line3:#bfb3a0;
+  --txt:#22201c; --dim:#55504a; --mute:#7d766c;
+  --cyan:#0a6f80; --cyan2:#0a6f80; --mag:#9c2a5f; --vio:#6b32a8;
+  --amb:#8a6100; --grn:#0a7048; --red:#b0233f;
+  --shadow:0 0 0 1px var(--line),0 4px 16px -8px rgba(0,0,0,.25);
+  --glow:none;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);
+  font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:52px 52px;background-position:-1px -1px;
+  background-attachment:fixed;opacity:1;
+}
+html[data-tema="lector"] body{background-image:none}
+/* scanlines solo en cyberpunk */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.16) 2px 3px);
+  mix-blend-mode:multiply;opacity:.5
+}
+html[data-tema="lector"] body::after{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ═══════════ LAYOUT ═══════════ */
+.topbar{
+  position:sticky;top:0;z-index:30;height:var(--th);display:flex;align-items:center;gap:14px;
+  padding:0 16px;background:color-mix(in srgb,var(--bg2) 92%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line2);
+}
+html[data-tema="lector"] .topbar{backdrop-filter:none}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:.14em;font-size:13px;white-space:nowrap}
+.brand .dot{width:8px;height:8px;background:var(--cyan);box-shadow:var(--glow);border-radius:50%;animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.brand b{color:var(--cyan)}
+html[data-tema="lector"] .brand .dot{animation:none}
+.brand small{color:var(--mute);font-weight:600;letter-spacing:.06em;font-size:10px;display:block;margin-top:-4px}
+
+.search{position:relative;flex:1;max-width:460px}
+.search input{
+  width:100%;height:34px;padding:0 34px 0 32px;background:var(--bg3);color:var(--txt);
+  border:1px solid var(--line2);border-radius:var(--r);font:14px var(--sans);outline:0
+}
+.search input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,229,255,.12)}
+.search .ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--mute);font-size:13px;pointer-events:none}
+.search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mute);cursor:pointer;font-size:16px;padding:4px 7px;display:none}
+.search.has .clr{display:block}
+.search .clr:hover{color:var(--red)}
+.kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font:10px var(--mono);color:var(--mute);border:1px solid var(--line2);border-radius:3px;padding:1px 5px;pointer-events:none}
+.search:focus-within .kbd{display:none}
+
+.tbtn{
+  height:34px;padding:0 12px;background:var(--bg3);color:var(--dim);border:1px solid var(--line2);
+  border-radius:var(--r);font:600 12px var(--sans);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px
+}
+.tbtn:hover{color:var(--txt);border-color:var(--line3);background:var(--panel2)}
+.tbtn.on{color:var(--bg);background:var(--cyan);border-color:var(--cyan);font-weight:800}
+html[data-tema="lector"] .tbtn.on{color:#fff}
+#menu{display:none}
+
+.layout{display:flex;align-items:flex-start;min-height:calc(100vh - var(--th))}
+.sidebar{
+  width:var(--sw);flex:0 0 var(--sw);position:sticky;top:var(--th);height:calc(100vh - var(--th));
+  overflow-y:auto;border-right:1px solid var(--line);background:var(--bg2);padding:14px 0 60px
+}
+.sidebar::-webkit-scrollbar,.main::-webkit-scrollbar{width:9px;height:9px}
+.sidebar::-webkit-scrollbar-thumb,.main::-webkit-scrollbar-thumb{background:var(--line2);border-radius:9px}
+.grp{margin-bottom:6px}
+.grp>h4{
+  margin:16px 0 5px;padding:0 16px;font:800 10px var(--sans);letter-spacing:.18em;color:var(--mute);text-transform:uppercase;
+  display:flex;align-items:center;gap:7px
+}
+.grp>h4::after{content:'';flex:1;height:1px;background:var(--line)}
+.navlink{
+  display:flex;align-items:center;gap:8px;padding:6px 16px;color:var(--dim);text-decoration:none;
+  font-size:13.5px;border-left:2px solid transparent;line-height:1.4
+}
+.navlink:hover{color:var(--txt);background:var(--panel);border-left-color:var(--line3)}
+.navlink.act{color:var(--cyan);border-left-color:var(--cyan);background:var(--panel2);font-weight:700}
+.navlink .idx{font:700 10px var(--mono);color:var(--mute);min-width:20px}
+.navlink.act .idx{color:var(--cyan2)}
+.navlink .pg{margin-left:auto;font:700 9.5px var(--mono);color:var(--mute);background:var(--bg3);padding:1px 5px;border-radius:99px;border:1px solid var(--line)}
+.navlink.act .pg{color:var(--cyan);border-color:var(--cyan2)}
+.navlink.done .idx::after{content:'✓';color:var(--grn);margin-left:2px}
+html[data-tema="lector"] .navlink.act{color:var(--cyan)}
+
+.main{flex:1;min-width:0;padding:26px 34px 120px;max-width:1180px}
+
+/* ═══════════ WIDGETS ═══════════ */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:18px}
+.card>h3{margin:0 0 4px;font:800 13px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+html[data-tema="lector"] .card>h3{color:var(--cyan2)}
+.card .sub{color:var(--mute);font-size:12.5px;margin-bottom:14px}
+
+.hero{border:1px solid var(--line2);border-radius:var(--r);padding:24px 26px;margin-bottom:18px;background:
+  radial-gradient(900px 220px at 8% -40%,rgba(0,229,255,.11),transparent 62%),
+  radial-gradient(760px 200px at 96% -30%,rgba(255,46,136,.10),transparent 60%),var(--panel)}
+.hero h1{margin:0 0 6px;font-size:25px;letter-spacing:-.3px;line-height:1.2}
+.hero h1 em{font-style:normal;color:var(--cyan);text-shadow:var(--glow)}
+.hero p{margin:0;color:var(--dim);font-size:14px;max-width:70ch}
+.hero .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font:700 10.5px var(--mono);letter-spacing:.06em;color:var(--cyan);border:1px solid var(--cyan2);background:rgba(0,229,255,.07);padding:3px 8px;border-radius:99px}
+.tag.a{color:var(--amb);border-color:var(--amb);background:rgba(255,179,0,.07)}
+.tag.m{color:var(--mag);border-color:var(--mag);background:rgba(255,46,136,.07)}
+.tag.v{color:var(--vio);border-color:var(--vio);background:rgba(168,85,247,.07)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px}
+.stat .n{font:800 23px var(--mono);color:var(--cyan);line-height:1.1;letter-spacing:-.5px}
+html[data-tema="lector"] .stat .n{color:var(--cyan2)}
+.stat .l{font:700 9.5px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--mute);margin-top:5px}
+.stat.warn .n{color:var(--amb)} .stat.good .n{color:var(--grn)}
+
+.fase-row{display:grid;grid-template-columns:150px 1fr 62px;align-items:center;gap:14px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.fase-row:last-child{border:0}
+.fase-row .nm{font:700 13px var(--sans);color:var(--txt)}
+.fase-row .nm small{display:block;font:500 11px var(--sans);color:var(--mute)}
+.bar{height:8px;background:var(--bg3);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan2),var(--cyan));box-shadow:var(--glow);transition:width .35s ease}
+.fase-row .pc{font:800 12px var(--mono);color:var(--cyan);text-align:right}
+html[data-tema="lector"] .fase-row .pc{color:var(--cyan2)}
+.fase-row.z0 .bar i{background:linear-gradient(90deg,#0a7d8c,var(--cyan))}
+.fase-row.z1 .bar i{background:linear-gradient(90deg,#0a7d8c,var(--cyan))}
+.fase-row.z2 .bar i{background:linear-gradient(90deg,#6b32a8,var(--vio))}
+.fase-row.z3 .bar i{background:linear-gradient(90deg,#8a6100,var(--amb))}
+.fase-row.z4 .bar i{background:linear-gradient(90deg,#9c2a5f,var(--mag))}
+
+.hoy{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hoy .t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.hoy .sem{font:800 12px var(--mono);color:var(--mag);letter-spacing:.1em}
+.hoy h4{margin:0;font-size:16px;line-height:1.4}
+.hoy .hit{color:var(--grn);font-size:13.5px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+.hoy .hit b{color:var(--mute);font:700 10px var(--sans);letter-spacing:.12em;display:block;text-transform:uppercase;margin-bottom:3px}
+.wknav{display:flex;gap:6px;align-items:center;margin-top:12px}
+.wknav button{background:var(--bg3);border:1px solid var(--line2);color:var(--dim);border-radius:var(--r);height:28px;padding:0 10px;cursor:pointer;font:600 12px var(--sans)}
+.wknav button:hover{color:var(--cyan);border-color:var(--cyan2)}
+.wknav input{width:100px;height:28px;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);color:var(--txt);padding:0 8px;font:12px var(--sans)}
+
+ul.goals{margin:0;padding:0;list-style:none}
+ul.goals li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px;color:var(--dim)}
+ul.goals li:last-child{border:0}
+ul.goals li b{color:var(--txt);font-weight:700}
+ul.goals .n{font:800 11px var(--mono);color:var(--cyan2);min-width:22px}
+
+/* ═══════════ CONTENIDO MARKDOWN ═══════════ */
+.vista{max-width:100%}
+.vista h1{
+  font-size:27px;line-height:1.22;letter-spacing:-.4px;margin:6px 0 20px;padding-bottom:14px;
+  border-bottom:1px solid var(--line2);color:var(--txt)
+}
+.vista h1 em{font-style:normal;color:var(--cyan);text-shadow:var(--glow)}
+html[data-tema="lector"] .vista h1 em{color:var(--cyan2);text-shadow:none}
+.vista h2{
+  font-size:20px;margin:38px 0 12px;padding-left:12px;border-left:3px solid var(--cyan);line-height:1.3
+}
+.vista h3{font-size:16.5px;margin:28px 0 9px;color:var(--txt)}
+.vista h4{font-size:14.5px;margin:22px 0 7px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.vista h2:first-child{margin-top:0}
+.vista p{margin:0 0 13px;color:var(--dim);max-width:82ch}
+.vista strong{color:var(--txt);font-weight:700}
+.vista em{color:var(--txt)}
+.vista a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(0,229,255,.32)}
+html[data-tema="lector"] .vista a{color:var(--cyan2);border-bottom-color:rgba(10,111,128,.35)}
+.vista a:hover{border-bottom-color:var(--cyan)}
+
+.vista ul,.vista ol{margin:0 0 15px;padding-left:23px;color:var(--dim);max-width:82ch}
+.vista li{margin:4px 0;padding-left:3px}
+.vista li::marker{color:var(--cyan2);font-weight:700}
+.vista ul ul,.vista ol ol,.vista ul ol,.vista ol ul{margin:4px 0}
+.vista li>ul>li::marker{color:var(--mute)}
+
+code{
+  font-family:var(--mono);font-size:.875em;background:var(--bg3);border:1px solid var(--line);
+  padding:1px 5px;border-radius:3px;color:var(--amb);white-space:nowrap
+}
+html[data-tema="lector"] code{color:var(--mag)}
+.vista pre{
+  margin:0 0 16px;padding:15px 17px;background:var(--bg2);border:1px solid var(--line2);
+  border-left:3px solid var(--cyan2);border-radius:var(--r);overflow-x:auto;position:relative
+}
+html[data-tema="lector"] .vista pre{background:var(--panel2);border-left-color:var(--cyan)}
+.vista pre code{
+  background:none;border:0;padding:0;color:var(--txt);font-size:13px;line-height:1.62;white-space:pre;display:block
+}
+html[data-tema="lector"] .vista pre code{color:#1c1a17}
+.vista pre[data-lang]:not([data-lang=""])::before{
+  content:attr(data-lang);position:absolute;top:0;right:0;font:700 9px var(--mono);letter-spacing:.14em;
+  color:var(--mute);background:var(--bg3);border-left:1px solid var(--line2);border-bottom:1px solid var(--line2);
+  padding:3px 8px;border-bottom-right-radius:3px;text-transform:uppercase
+}
+
+blockquote{
+  margin:0 0 16px;padding:12px 18px;background:var(--panel2);border:1px solid var(--line);
+  border-left:3px solid var(--amb);border-radius:var(--r);color:var(--dim);font-size:14.5px
+}
+blockquote p:last-child{margin:0}
+blockquote strong{color:var(--amb)}
+
+table{
+  width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13.5px;display:block;overflow-x:auto
+}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--bg3);color:var(--cyan);font:800 11.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+html[data-tema="lector"] th{color:var(--cyan2);background:var(--panel2)}
+td{color:var(--dim)}
+tr:nth-child(even) td{background:rgba(255,255,255,.012)}
+html[data-tema="lector"] tr:nth-child(even) td{background:rgba(0,0,0,.015)}
+td strong{color:var(--txt)}
+hr{border:0;border-top:1px solid var(--line2);margin:32px 0}
+
+/* checkboxes */
+li.task{list-style:none;margin-left:-23px;padding-left:0}
+.taskbox{display:flex;gap:11px;align-items:flex-start;cursor:pointer;padding:3px 0}
+.taskbox input{
+  appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:0 0 17px;margin-top:3px;
+  border:1.5px solid var(--line3);background:var(--bg3);border-radius:3px;cursor:pointer;position:relative;transition:.15s
+}
+.taskbox input:hover{border-color:var(--cyan)}
+.taskbox input:checked{background:var(--cyan);border-color:var(--cyan)}
+html[data-tema="lector"] .taskbox input:checked{background:var(--cyan2);border-color:var(--cyan2)}
+.taskbox input:checked::after{
+  content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:var(--bg);
+  font:900 12px var(--sans);line-height:1
+}
+html[data-tema="lector"] .taskbox input:checked::after{color:#fff}
+.taskbox span{color:var(--dim)}
+.taskbox input:checked+span{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--line3)}
+.taskbox:hover span{color:var(--txt)}
+
+/* results */
+.res{padding:2px 0 20px}
+.rescount{color:var(--mute);font:600 12px var(--mono);margin-bottom:12px}
+.hitcard{
+  display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);padding:12px 15px;margin-bottom:7px;cursor:pointer;color:inherit
+}
+.hitcard:hover{border-color:var(--cyan2);background:var(--panel2)}
+.hitcard h5{margin:0 0 4px;font:700 14px var(--sans);color:var(--txt)}
+.hitcard .loc{font:700 10px var(--mono);color:var(--cyan2);letter-spacing:.1em;text-transform:uppercase}
+.hitcard p{margin:5px 0 0;font-size:13px;color:var(--mute);line-height:1.55}
+mark{background:rgba(255,179,0,.3);color:inherit;padding:0 2px;border-radius:2px;font-weight:700}
+html[data-tema="lector"] mark{background:rgba(255,179,0,.55)}
+
+.progwrap{max-width:100%}
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);z-index:60;
+  background:var(--bg3);border:1px solid var(--cyan2);color:var(--cyan);border-radius:var(--r);
+  padding:9px 17px;font:700 12.5px var(--sans);box-shadow:var(--shadow);transition:transform .28s;pointer-events:none
+}
+.toast.on{transform:translateX(-50%) translateY(0)}
+#docall{display:none}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:900px){
+  .sidebar{position:fixed;left:0;top:var(--th);z-index:25;transform:translateX(-100%);transition:transform .25s;box-shadow:20px 0 50px -20px #000}
+  .sidebar.open{transform:none}
+  #menu{display:inline-flex}
+  .main{padding:20px 16px 100px}
+  .hoy{grid-template-columns:1fr}
+  .fase-row{grid-template-columns:110px 1fr 52px;gap:10px}
+  .brand small{display:none}
+}
+
+/* ═══════════ PRINT / PDF ═══════════ */
+@media print{
+  @page{size:A4;margin:16mm 14mm 18mm}
+  html,body{background:#fff!important;color:#111!important;font-size:10.5pt;line-height:1.5}
+  body{background-image:none!important}
+  body::after{display:none!important}
+  .topbar,.sidebar,.no-print,.toast,.wknav{display:none!important}
+  .layout{display:block;min-height:0}
+  .main{padding:0;max-width:none}
+  #docall{display:block!important}
+  #app{display:none!important}
+  .vista{page-break-before:always;padding-top:0}
+  .vista:first-child{page-break-before:auto}
+  .vista h1{font-size:19pt;border-bottom:1.5pt solid #111;padding-bottom:7pt;margin:0 0 12pt;page-break-after:avoid}
+  .vista h2{font-size:14pt;margin:18pt 0 7pt;padding-left:7pt;border-left:3pt solid #000;page-break-after:avoid}
+  .vista h3{font-size:12pt;margin:14pt 0 5pt;page-break-after:avoid}
+  .vista h4{font-size:10.5pt;page-break-after:avoid}
+  .vista p,.vista li,.vista td{color:#222!important;max-width:none}
+  .vista strong,.vista h1 em{color:#000!important}
+  .vista ul,.vista ol{padding-left:16pt}
+  .vista pre{
+    background:#f4f4f4!important;border:1pt solid #bbb;border-left:3pt solid #000;
+    white-space:pre-wrap;word-break:break-word;page-break-inside:avoid
+  }
+  .vista pre code{font-size:8.6pt;color:#111!important;line-height:1.4;white-space:pre-wrap}
+  .vista pre[data-lang]:not([data-lang=""])::before{color:#666;background:#eee;border-color:#bbb}
+  code{background:#f0f0f0!important;border:1pt solid #ccc;color:#000!important;white-space:pre-wrap}
+  table{font-size:8.8pt;page-break-inside:auto;display:table}
+  th{background:#eee!important;color:#000!important;border:1pt solid #999;font-size:8pt}
+  th,td{border:1pt solid #999;padding:3pt 5pt}
+  tr{page-break-inside:avoid}
+  tr:nth-child(even) td{background:#f8f8f8!important}
+  a{color:#000!important;border:0!important;text-decoration:none}
+  a[href^="http"]::after{content:" ⟨"attr(href)"⟩";font-size:7.4pt;color:#555;word-break:break-all}
+  blockquote{background:#f7f7f7!important;border:1pt solid #ccc;border-left:3pt solid #000;color:#222!important;page-break-inside:avoid}
+  blockquote strong{color:#000!important}
+  .taskbox input{appearance:none;border:1.2pt solid #666;width:10pt;height:10pt;flex:0 0 10pt}
+  .taskbox input:checked{background:#000!important}
+  .taskbox input:checked::after{color:#fff}
+  .taskbox span,.taskbox input:checked+span{color:#222!important;text-decoration:none!important}
+  li.task{margin-left:0;list-style:none}
+  hr{border-top:1pt solid #bbb;margin:14pt 0}
+  .card,.hero{box-shadow:none;border:0;padding:0;margin:0}
+  .portada{page-break-after:always;border-bottom:2pt solid #000;padding-bottom:14pt;margin-bottom:18pt}
+  .portada h1{font-size:24pt;page-break-after:auto}
+  .portada p{font-size:11pt}
+  .portada .tag{color:#000!important;border-color:#666!important;background:#f2f2f2!important}
+  .phead{display:flex;justify-content:space-between;align-items:baseline;gap:8pt;font:600 8.4pt var(--mono);color:#666;border-bottom:.5pt solid #ccc;padding-bottom:3pt;margin:0 0 9pt;text-transform:uppercase;letter-spacing:.4pt}
+  .phead b{color:#000}
+  .phead .pf{background:#111;color:#fff!important;padding:1pt 4pt}
+  a.xt{color:#000;font-weight:700;text-decoration:none;border-bottom:1pt solid #000}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="tbtn" id="menu" aria-label="Menú">☰</button>
+  <div class="brand"><span class="dot"></span><div>ROADMAP<b>CYBER</b><small>NIVEL 0 → SENIOR</small></div></div>
+  <div class="search" id="sw">
+    <span class="ico">⌕</span>
+    <input type="search" id="q" placeholder="Buscar en todo el roadmap…" autocomplete="off" spellcheck="false" aria-label="Buscar">
+    <span class="kbd">/</span>
+    <button class="clr" id="qclr" aria-label="Limpiar">×</button>
+  </div>
+  <button class="tbtn" id="tema" title="Cambiar entre cyberpunk y modo lector (T)">◐ LECTOR</button>
+  <button class="tbtn" id="reset" title="Reiniciar todo el progreso">↺</button>
+  <button class="tbtn" id="pdf" title="Descargar / imprimir a PDF">⤓ PDF</button>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sb"></nav>
+  <main class="main" id="app"></main>
+</div>
+
+<main id="docall"></main>
+<div class="toast" id="toast"></div>
+
+<script id="datos" type="application/json">@@CONTENT_JSON@@</script>
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════════════
+   DATOS
+   ════════════════════════════════════════════════════════════════ */
+const DOCS = JSON.parse(document.getElementById('datos').textContent);
+const ES_IMPRIMIR = /[?&]imprimir=1/.test(location.search);
+
+/* ════════════════════════════════════════════════════════════════
+   PARSER MARKDOWN → HTML
+   ════════════════════════════════════════════════════════════════ */
+const CODES = [];
+let seq = 0;
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function slug(s){
+  return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'-').slice(0,60) || 'x';
+}
+function hsh(s){
+  let h=0; for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0;} return 't'+(h>>>0).toString(36);
+}
+
+function inline(s){
+  const links = [];
+  const L = (t,u)=>{links.push({t,u}); return '\u0001'+(links.length-1)+'\u0001';};
+  s = s.replace(/\u0000CODE(\d+)\u0000/g,(m,n)=>'\u0000B'+(+n+1)+'\u0000');
+  s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,(m,a,uu)=>L(a,uu));
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,a,uu)=>L(a,uu));
+  s = s.replace(/(^|[\s(>])(https?:\/\/[^\s<>()\u0001]+[^\s<>()\u0001.,;:])/g,(m,p,uu)=>p+L(uu,uu));
+  s = s.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  s = s.replace(/\*\*\*([^*]+)\*\*\*/g,'<strong><em>$1</em></strong>');
+  s = s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  s = s.replace(/(^|[\s(>])\*([^*\n]+)\*/g,'$1<em>$2</em>');
+  s = s.replace(/(^|[\s(>])_([^_\n]+)_/g,'$1<em>$2</em>');
+  s = s.replace(/~~([^~]+)~~/g,'<s>$1</s>');
+  s = s.replace(/\u0001(\d+)\u0001/g,(m,n)=>{
+    const l = links[n], abs = /^https?:/.test(l.u);
+    return '<a class="xt" href="'+l.u+'"'+(abs?' target="_blank" rel="noopener noreferrer"':'')+'>'+l.t+'</a>';
+  });
+  s = s.replace(/\u0000B(\d+)\u0000/g,(m,n)=>{
+    const c = CODES[n-1];
+    return '<pre data-lang="'+esc(c.l)+'"><code>'+esc(c.c.replace(/\n$/,''))+'</code></pre>';
+  });
+  return s;
+}
+
+function renderList(items, tag){
+  const min = Math.min.apply(null, items.map(i=>i.i));
+  let h = '<'+tag+'>', i = 0;
+  while(i < items.length){
+    if(items[i].i > min){
+      const sub = [];
+      while(i < items.length && items[i].i > min){ sub.push(items[i]); i++; }
+      h += renderList(sub, tag);
+      continue;
+    }
+    const it = items[i]; i++;
+    const t = it.t.match(/^\[([ xX])\]\s*([\s\S]*)$/);
+    if(t){
+      h += '<li class="task"><label class="taskbox"><input type="checkbox" data-task="'+hsh(t[2])+'"'+
+           (t[1].toLowerCase()==='x'?' checked':'')+'><span>'+inline(t[2])+'</span></label></li>';
+    } else {
+      h += '<li>'+inline(it.t)+'</li>';
+    }
+  }
+  return h+'</'+tag+'>';
+}
+
+function renderTable(rows){
+  const cells = r => r.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(c=>c.trim());
+  let h = '<table><thead><tr>'+cells(rows[0]).map(c=>'<th>'+inline(c)+'</th>').join('')+'</tr></thead><tbody>';
+  for(let i=2;i<rows.length;i++){
+    if(!rows[i].trim()) continue;
+    h += '<tr>'+cells(rows[i]).map(c=>'<td>'+inline(c)+'</td>').join('')+'</tr>';
+  }
+  return h+'</tbody></table>';
+}
+
+function parse(md){
+  const lines = md.split(/\r?\n/);
+  let out = '', i = 0, buf = null, tag = null;
+  const flush = ()=>{ if(buf){ out += renderList(buf, tag)+'\n'; buf=null; tag=null; } };
+  const isHR = l => /^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(l);
+  const isItem = l => /^(\s*)([-*+]|\d+[.)])\s+/.test(l);
+  const isHead = l => /^#{1,6}\s/.test(l);
+  const isQuote = l => /^\s*>/.test(l);
+  const isRow = l => /^\s*\|/.test(l);
+
+  while(i < lines.length){
+    const l = lines[i];
+    if(/^\u0000CODE\d+\u0000/.test(l)){ flush(); out += l+'\n'; i++; continue; }
+    if(isHR(l)){ flush(); out += '<hr>\n'; i++; continue; }
+    if(isRow(l) && i+1<lines.length && /^\s*\|[\s:|-]+\|?\s*$/.test(lines[i+1])){
+      flush(); const rows=[]; while(i<lines.length && isRow(lines[i])){ rows.push(lines[i]); i++; }
+      out += renderTable(rows)+'\n'; continue;
+    }
+    let m = l.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/);
+    if(m){ flush(); const n=m[1].length; out += '<h'+n+' id="'+slug(m[2])+'">'+inline(m[2])+'</h'+n+'>\n'; i++; continue; }
+    if(isQuote(l)){
+      flush(); const bq=[];
+      while(i<lines.length && (isQuote(lines[i]) || (bq.length && lines[i].trim() && !isHead(lines[i]) && !isItem(lines[i])))){
+        bq.push(lines[i].replace(/^\s*>\s?/,'')); i++;
+      }
+      out += '<blockquote>'+parse(bq.join('\n'))+'</blockquote>\n'; continue;
+    }
+    m = l.match(/^(\s*)([-*+]|\d+[.)])\s+([\s\S]*)$/);
+    if(m){
+      const t = /\d/.test(m[2]) ? 'ol' : 'ul';
+      if(tag !== t){ flush(); buf=[]; tag=t; }
+      buf.push({i:m[1].replace(/\t/g,'  ').length, t:m[3]});
+      i++; continue;
+    }
+    if(!l.trim()){ flush(); i++; continue; }
+    flush();
+    const p=[];
+    while(i<lines.length && lines[i].trim() && !isHead(lines[i]) && !isItem(lines[i]) &&
+          !isQuote(lines[i]) && !isRow(lines[i]) && !isHR(lines[i]) && !/^\u0000CODE\d+\u0000/.test(lines[i])){
+      p.push(lines[i].trim()); i++;
+    }
+    if(p.length) out += '<p>'+inline(p.join(' '))+'</p>\n';
+  }
+  flush();
+  return out;
+}
+
+function html(md){
+  CODES.length = 0;
+  const src = md.replace(/```([\w+#-]*)[ \t]*\r?\n([\s\S]*?)```/g,(m,l,c)=>{
+    CODES.push({l:(l||'').toLowerCase(), c:c});
+    return '\u0000CODE'+(CODES.length-1)+'\u0000';
+  });
+  return parse(src);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ÍNDICE DE VISTAS
+   ════════════════════════════════════════════════════════════════ */
+const VISTAS = [];
+function buildViews(){
+  DOCS.forEach(d=>{
+    const re = new RegExp('^#{'+d.nivel+'} +(.+)$','gm');
+    const hits = []; let m;
+    while((m = re.exec(d.txt)) !== null) hits.push({t:m[1].trim(), at:m.index});
+    if(!hits.length){ VISTAS.push(mk(d,'',d.txt,0)); return; }
+    const pre = d.txt.slice(0, hits[0].at).trim();
+    if(pre.length > 80) VISTAS.push(mk(d,'Prólogo',pre,0));
+    hits.forEach((h,k)=>{
+      const end = k+1 < hits.length ? hits[k+1].at : d.txt.length;
+      let fz = d.fase;
+      if(d.autoFase){
+        const mt = h.t.match(/FASE\s*([0-4])/i);
+        fz = mt ? parseInt(mt[1],10) : null;
+      }
+      VISTAS.push(mk(d, h.t, d.txt.slice(h.at, end), fz));
+    });
+  });
+}
+function mk(d, titulo, crudo, fase){
+  const id = 'v'+(seq++);
+  const cuerpo = html(crudo);
+  const n = (cuerpo.match(/data-task="/g)||[]).length;
+  const dm = crudo.match(/(\d+(?:[.,]\d+)?)\s*h\b/i);
+  return {id, doc:d.doc, titulo, fase, crudo, cuerpo, n, horas:dm?parseFloat(dm[1].replace(',','.')):0};
+}
+buildViews();
+const BY = {}; VISTAS.forEach(v=>BY[v.id]=v);
+
+/* ════════════════════════════════════════════════════════════════
+   ESTADO
+   ════════════════════════════════════════════════════════════════ */
+const K = (document.querySelector('meta[name="ruta-clave"]')||{}).content || 'ruta-cyber.v1';
+let E = {tareas:{}, tema:'cyber', vista:'inicio', sem:0, inicio:Date.now(), horas:{}};
+try{ const s = localStorage.getItem(K); if(s) E = Object.assign(E, JSON.parse(s)); }catch(e){}
+const save = ()=>{ try{ localStorage.setItem(K, JSON.stringify(E)); }catch(e){} };
+
+function totalTareas(){ return VISTAS.reduce((a,v)=>a+v.n,0); }
+function nHechasVista(v){
+  return (v.cuerpo.match(/data-task="([^"]+)"/g)||[])
+    .map(m=>m.slice(11,-1)).filter(id=>E.tareas[id]).length;
+}
+function pctVista(v){ return v.n ? Math.round(nHechasVista(v)/v.n*100) : 0; }
+function faseStats(f){
+  const vs = VISTAS.filter(v=>v.fase===f);
+  const t = vs.reduce((a,v)=>a+v.n,0);
+  const h = vs.reduce((a,v)=>a+nHechasVista(v),0);
+  return {t, h, p: t?Math.round(h/t*100):0, vs};
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PLAN 52 SEMANAS
+   ════════════════════════════════════════════════════════════════ */
+const PLAN = [
+["Fundamentos de seguridad, CIA, ATT&CK","Tabla de 5 vulnerabilidades históricas"],
+["Redes I: OSI, TCP/IP, subnetting, CIDR, ARP","20 problemas de subnetting resueltos"],
+["Redes II: TCP/UDP, puertos, DNS, DHCP, NAT, routing","Diagrama de tu red + dig/nslookup documentados"],
+["Redes III: HTTP/HTTPS/TLS, proxies, firewalls, VPN","Captura Wireshark de un TLS handshake exegética"],
+["Montar lab de 3 VMs y romper/arreglar puertos","Lab funcionando y documentado"],
+["Linux I: FHS, permisos, SUID, usuarios, shadow","Bitácora de comandos"],
+["Linux II: grep/awk/sed/find, systemd, cron, SSH","40 ejercicios de shell resueltos"],
+["Linux III: bash scripting + OverTheWire Bandit 0-10","Bandit 0-10 con writeups"],
+["Windows I: NTFS, ADS, ACLs, procesos, registro","Tabla de permisos NTFS"],
+["Windows II: PowerShell + Event Viewer","Script PS que exporta CSV y programa una tarea"],
+["Sysmon: instalación, config y captura de eventos","20 Event IDs catalogados"],
+["Criptografía + CryptoHack + revisión del trimestre","CryptoHack: Classical, Encoding, Hashes"],
+["Fundamentos web, HTML/JS, DevTools","Explicar un flujo HTTP completo"],
+["OWASP Top 10: SSRF, SSTI, OS command injection","8 labs de PortSwigger"],
+["SQL injection (la más importante)","10 labs + 1 writeup largo"],
+["SQLi avanzado, NoSQL, second-order","8 labs + writeup"],
+["Cross-Site Scripting: reflected, stored, DOM","10 labs"],
+["CSRF + Access Control/IDOR + Broken Auth","10 labs"],
+["Path Traversal, LFI, SSRF, Information disclosure","10 labs"],
+["Burp Suite a fondo + OWASP ZAP","3 workflows automatizados"],
+["Nmap a fondo + SMB, LDAP, SNMP","Informe de enumeración de tu lab"],
+["Cracking con john y hashcat","20 hashes rotos"],
+["Privilege escalation Linux: linpeas, SUID, sudo","3 máquinas Hack The Box Linux"],
+["Privilege escalation Windows: tokens, UAC, servicios","2 máquinas HTB Windows + informe PDF"],
+["PortSwigger: deserialización y request smuggling","10 labs"],
+["PortSwigger: business logic, JWT, OAuth/OIDC","10 labs"],
+["Informe profesional de pentest (plantilla real)","Informe PDF de 20 páginas"],
+["Primer AD lab + BloodHound intro","AD funcionando + primer grafo"],
+["Kerberos y NTLM a fondo: Kerberoast, AS-REP, PtH","3 writeups de ataques Kerberos"],
+["DCSync, ACL abuse, GPO abuse, delegation","Domain Admin documentado"],
+["ADCS ESC1-ESC8 + Certipy + detección","Writeup de ADCS"],
+["GOAD completo de principio a fin","Writeup de 3000+ palabras"],
+["Blue team: Sigma, Atomic Red Team, Wazuh","15 reglas Sigma probadas"],
+["Exploit dev: stack overflow, canarios, ROP","Exploit propio funcional"],
+["Exploit dev: pwntools, bypass de mitigaciones","2º exploit propio"],
+["Malware análisis estático: PE/ELF, capa, .NET","Informe de análisis estático"],
+["Malware análisis dinámico: x64dbg, WinDbg, sandbox","Informe de análisis dinámico"],
+["Cloud security: AWS/Azure + CloudGoat","Informe de pentest cloud"],
+["Kubernetes security: kube-hunter, container escape","Cluster comprometido"],
+["Forense avanzado: Volatility 3, NTFS, timeline","Informe forense completo"],
+["Blue team: 25 técnicas atómicas, 20 detectadas","Dashboard + 20 reglas propias"],
+["Purple team: simulacro de ataque completo","Informe de misses de detección"],
+["Bug bounty: primeros reports enviados","1 finding reportado"],
+["Portfolio: GitHub, writeups, perfil público","Perfil público funcionando"],
+["Repaso general de Fase 2","2 máquinas HTB Pro Lab"],
+["Elige ruta de Fase 3 (Red / Blue / Cloud)","Plan de especialización escrito"],
+["SANS Reading Room: whitepapers clave","3 resúmenes escritos"],
+["Escribe 2 blogs técnicos","2 blogs publicados"],
+["Simulación red team completa de 2 semanas","Informe final de la simulación"],
+["Revisión del año y cierre de fases","Plan del año 2"],
+["Repaso activo: releer tus writeups","Índice de writeups actualizado"],
+["Cierre: ruta actualizada y objetivos del año 3","Checklist anual firmado"]
+];
+function semanaActual(){
+  if(E.sem) return Math.min(52, Math.max(1, E.sem));
+  const d = Math.floor((Date.now() - E.inicio) / 6048e5) + 1;
+  return Math.min(52, Math.max(1, d));
+}
+function trimestre(s){
+  return s<=12?['TRIMESTRE 1','Fase 0 · Cimientos'] : s<=24?['TRIMESTRE 2','Fase 1 · Web pentest'] :
+         s<=36?['TRIMESTRE 3','Fase 1 cierre + Fase 2 AD'] : ['TRIMESTRE 4','Fase 2 · Exploits, malware, cloud'];
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RENDER
+   ════════════════════════════════════════════════════════════════ */
+const $ = s => document.querySelector(s);
+const app = $('#app'), sb = $('#sb');
+
+function renderSidebar(){
+  const f0 = faseStats(0), f5 = faseStats(4);
+  let h = '';
+  h += '<div class="grp"><h4>Panel</h4>';
+  h += lnk('inicio','▶','Inicio y progreso');
+  h += lnk('hoy','◷','Qué hago hoy');
+  h += lnk('labs','☑','Checklist de fases');
+  h += '</div>';
+  h += '<div class="grp"><h4>Las 5 fases</h4>';
+  for(let f=0;f<=4;f++){
+    const st = faseStats(f);
+    h += lnk('fase'+f, '0'+(f+1), 'Fase '+f+' · '+NOMBRE_FASE[f], st.p);
+  }
+  h += '</div>';
+  const docs = {};
+  VISTAS.forEach(v=>{ (docs[v.doc] = docs[v.doc]||[]).push(v); });
+  for(const k in docs){
+    h += '<div class="grp"><h4>'+k.toUpperCase()+'</h4>';
+    docs[k].forEach(v=>{
+      const p = v.n ? pctVista(v) : -1;
+      h += '<a class="navlink'+(E.vista===v.id?' act':'')+(v.n&&p===100?' done':'')+'" href="#'+v.id+'" data-go="'+v.id+'">'+
+           '<span class="idx">'+(p===100?'✓':(v.titulo||'·').slice(0,2).toUpperCase())+'</span>'+
+           '<span style="flex:1">'+corta(v.titulo||'Prólogo',40)+'</span>'+
+           (p>=0?'<span class="pg">'+p+'%</span>':'')+'</a>';
+    });
+    h += '</div>';
+  }
+  sb.innerHTML = h;
+  sb.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();ir(a.dataset.go);$('#sb').classList.remove('open');}));
+}
+const NOMBRE_FASE = ['Cimientos','Principiante','Intermedio','Avanzado','Senior'];
+function lnk(id, idx, txt, pg){
+  return '<a class="navlink'+(E.vista===id?' act':'')+'" href="#'+id+'" data-go="'+id+'"><span class="idx">'+idx+'</span>'+
+         '<span style="flex:1">'+txt+'</span>'+(pg!==undefined?'<span class="pg">'+pg+'%</span>':'')+'</a>';
+}
+function corta(s,n){ return s.length>n ? s.slice(0,n-1)+'…' : s; }
+
+function vistaInicio(){
+  const T = totalTareas(), H = VISTAS.reduce((a,v)=>a+nHechasVista(v),0);
+  const pct = T?Math.round(H/T*100):0;
+  let h = '<div class="hero"><h1>De <em>Nivel 0</em> a Senior</h1>'+
+    '<p>Ruta de estudio de ciberseguridad en cinco etapas, con plan de 52 semanas, checklists verificables y labs obligatorios. Todo tu contenido, en un solo archivo, sin conexión y con tu progreso guardado.</p>'+
+    '<div class="tags"><span class="tag">5 FASES</span><span class="tag a">~2.700 H</span><span class="tag m">3 AÑOS</span>'+
+    '<span class="tag v">REGLA 30/50/20</span><span class="tag">NETWORK / WEB / AD / CLOUD / BLUE</span></div></div>';
+
+  h += '<div class="stats">';
+  h += st(Math.round(H/T*100)+'%','Progreso global', pct>=60?'good':(pct>=25?'':'warn'));
+  h += st(H+' / '+T,'Checklists hechos','');
+  h += st(semanaActual(),'Semana del plan','');
+  h += st(VISTAS.length,'Capítulos','');
+  h += '</div>';
+
+  h += '<div class="card"><h3>Progreso por fase</h3><div class="sub">Marca los checkboxes dentro de cada capítulo. Se guardan solos en este navegador.</div>';
+  for(let f=0;f<=4;f++){
+    const s = faseStats(f);
+    h += '<div class="fase-row z'+f+'" data-fase="'+f+'" style="cursor:pointer">'+
+      '<div class="nm">Fase '+f+'<small>'+NOMBRE_FASE[f]+'</small></div>'+
+      '<div class="bar"><i style="width:'+s.p+'%"></i></div>'+
+      '<div class="pc">'+s.p+'%</div></div>';
+  }
+  const sg = faseStats(null);
+  if(sg.t){
+    h += '<div class="fase-row z5" data-fase="transversal" style="cursor:pointer">'+
+      '<div class="nm">Transversal<small>Entorno, plan y recursos</small></div>'+
+      '<div class="bar"><i style="width:'+sg.p+'%"></i></div>'+
+      '<div class="pc">'+sg.p+'%</div></div>';
+  }
+  h += '</div>';
+
+  const s = semanaActual(), q = trimestre(s), p = PLAN[s-1];
+  h += '<div class="hoy">';
+  h += '<div class="card"><h3>Tu semana · '+q[0]+'</h3><div class="sub">'+q[1]+'</div>'+
+    '<div class="t"><span class="sem">SEMANA '+String(s).padStart(2,'0')+' / 52</span><h4>'+p[0]+'</h4></div>'+
+    '<div class="hit"><b>Entregable de la semana</b>'+p[1]+'</div>'+
+    '<div class="wknav"><button data-w="-1">◀ Anterior</button><input type="number" id="wkin" min="1" max="52" value="'+s+'"><button data-w="1">Siguiente ▶</button></div>'+
+    '<div class="wknav" style="margin-top:6px"><button data-reinicio="1">↺ Reiniciar plan desde hoy</button></div>'+
+    '</div>';
+
+  h += '<div class="card"><h3>Checklist de la semana tipo</h3><div class="sub">La rutina que repite el éxito</div><ul class="goals">'+
+    '<li><span class="n">L</span><span><b>Teoría + práctica guiada</b> — 2 h (30 %)</span></li>'+
+    '<li><span class="n">M</span><span><b>Lab práctico</b> — 2 h (50 %)</span></li>'+
+    '<li><span class="n">X</span><span><b>Lab práctico o lectura de código</b> — 2 h</span></li>'+
+    '<li><span class="n">J</span><span><b>Proyecto de la fase</b> — 2 h</span></li>'+
+    '<li><span class="n">V</span><span><b>Writeup</b> — 1 h (20 %)</span></li>'+
+    '<li><span class="n">S</span><span><b>Bloque largo</b> — 3 h</span></li>'+
+    '<li><span class="n">D</span><span><b>Actualización técnica</b> — 1 h</span></li>'+
+    '</ul><div class="sub" style="margin:14px 0 0">Regla: nunca dos sesiones seguidas sin escribir. Siempre snapshot antes de cada lab.</div></div>';
+  h += '</div>';
+
+  h += '<div class="card"><h3>Las tres reglas que deciden tu éxito</h3><ul class="goals">'+
+    '<li><span class="n">1</span><span><b>30 % teoría / 50 % práctica / 20 % escritura.</b> Lo que no se escribe, se olvida. Tu repo de notas es lo que te diferenciará en una entrevista.</span></li>'+
+    '<li><span class="n">2</span><span><b>Profundidad en 1-2 dominios &gt; amplitud en 5.</b> El mercado premia diagnosticar, comunicar y ser profundo en algo concreto.</span></li>'+
+    '<li><span class="n">3</span><span><b>Constancia &gt; intensidad.</b> 2 h/día durante 3 años (≈2.700 h) te lleva a Senior. 12 h el domingo no te lleva a ningún sitio.</span></li>'+
+    '</ul></div>';
+
+  h += '<div class="card"><h3>Dónde se guarda tu progreso</h3><div class="sub">Privado por navegador. Nadie más lo ve.</div>'+
+    '<p style="font-size:13px;color:var(--mute);margin:0 0 10px">Los checks que marques, tu fecha de inicio y la semana en la que estás se guardan '+
+    '<b>únicamente en este navegador</b> (<code>localStorage</code>). No se envía nada a ningún servidor: el propietario de esta página no ve tu progreso y tú no ves el de nadie. '+
+    'Empiezas siempre en 0%.</p>'+
+    '<p style="font-size:13px;color:var(--mute);margin:0 0 14px"><b>Consecuencias prácticas:</b> el progreso <b>no se sincroniza</b> entre aplicaciones, entre ordenadores, ni entre Chrome y Firefox, y se pierde si borras los datos de navegación o usas incógnito. '+
+    'Por eso conviene que guardes una copia con el botón de abajo.</p>'+ vistaRespaldo();
+  return h;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   RESPALDO: EXPORTAR / IMPORTAR PROGRESO
+   El estado vive entero en el objeto E, así que basta con
+   volcarlo a un JSON. Eso permite llevarlo a otro dispositivo
+   pegándolo en un textarea, sin cuentas ni servidores.
+   ════════════════════════════════════════════════════════════════ */
+function huella(){
+  // Huella del contenido: si cambian los checkboxes, los ids (hash del
+  // texto) cambian y una copia antigua puede quedar medio huérfana.
+  return hsh(Array.from(conocidos()).sort().join('|'));
+}
+var _CONOCIDOS = null;
+// Set con los ids de check que existen de verdad en ESTA versión del
+// contenido. Sirve para tirar fuera lo que venga en una copia ajena o
+// de una versión anterior del roadmap.
+function conocidos(){
+  if(_CONOCIDOS) return _CONOCIDOS;
+  const s = new Set();
+  if(typeof VISTAS !== 'undefined') VISTAS.forEach(v=>{
+    (String(v.cuerpo).match(/data-task="([^"]+)"/g)||[]).forEach(m=>s.add(m.slice(11,-1)));
+  });
+  return (_CONOCIDOS = s);
+}
+// Convierte cualquier cosa en un estado válido. Un fichero pegado a mano
+// puede traer tipos raros (tareas como texto, inicio como "x"): sin esto,
+// Object.assign copiaría los índices de un string como si fueran checks.
+function sanear(estado){
+  const limpio = {tareas:{}, inicio:Date.now(), sem:0, tema:'cyber', horas:{}};
+  if(!estado || typeof estado !== 'object') return limpio;
+  const t = estado.tareas;
+  if(t && typeof t === 'object' && !Array.isArray(t)){
+    const ok = conocidos();
+    for(const k in t){
+      // solo ids que existen aquí, y solo si el valor es "marcado"
+      if(ok.has(k) && (t[k] === 1 || t[k] === true)) limpio.tareas[k] = 1;
+    }
+  }
+  const f = Number(estado.inicio);
+  if(isFinite(f) && f > 0) limpio.inicio = f;
+  const s = Number(estado.sem);
+  if(isFinite(s)) limpio.sem = Math.min(52, Math.max(0, Math.round(s)));
+  if(typeof estado.tema === 'string' && estado.tema.length < 20) limpio.tema = estado.tema;
+  if(estado.horas && typeof estado.horas === 'object') limpio.horas = estado.horas;
+  return limpio;
+}
+function paquete(){
+  return {app:'ruta-cyber', version:1, clave:K, exporting:new Date().toISOString(), huella:huella(), estado:E};
+}
+function descargar(obj, nombre){
+  const url = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'}));
+  const a = document.createElement('a');
+  a.href = url; a.download = nombre;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+}
+function fechaCorta(){
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+// Fusión defensiva: nunca se desmarca nada al importar. Los checks se
+// unen (OR) y se toma la fecha más antigua y la semana más avanzada.
+function fusionar(a, b){
+  // a y b ya vienen saneados por sanear(): tareas es un objeto plano
+  // y sus claves son ids que existen en esta versión.
+  const tareas = Object.assign({}, a.tareas, b.tareas);
+  for(const k in a.tareas) if(a.tareas[k] || b.tareas[k]) tareas[k] = 1;
+  return {
+    tareas: tareas,
+    // el inicio más antiguo = el plan más avanzado en semanas
+    inicio: Math.min(a.inicio || Date.now(), b.inicio || Date.now()),
+    sem:    Math.max(a.sem || 0, b.sem || 0),
+    tema:    b.tema || a.tema || 'cyber',
+    horas:   Object.assign({}, a.horas, b.horas)
+  };
+}
+function aplicarPaquete(paq, modo){
+  if(!paq || typeof paq !== 'object' || paq.app !== 'ruta-cyber'){
+    toast('Ese fichero no es un progreso de esta app'); return false;
+  }
+  const limpio = sanear(paq.estado);
+  const antes = Object.keys(E.tareas||{}).length;
+  // checks que venían en la copia pero no existen en esta versión del roadmap
+  const total = (paq.estado && typeof paq.estado.tareas === 'object' && paq.estado.tareas)
+    ? Object.keys(paq.estado.tareas).length : 0;
+  const descartados = Math.max(0, total - Object.keys(limpio.tareas).length);
+  if(paq.huella && paq.huella !== huella())
+    toast('Aviso: el contenido de la app ha cambiado, algún check puede no cuadrar');
+  if(modo === 'reemplazar'){
+    E = Object.assign(limpio, {tareas: limpio.tareas, vista: E.vista});
+  }else{
+    E = Object.assign(fusionar(sanear(E), limpio), {vista: E.vista});
+  }
+  save(); pintar();
+  const n = Object.keys(E.tareas).length;
+  const extra = descartados ? ' ('+descartados+' checks no existen en esta versión y se ignoraron)' : '';
+  toast(modo === 'reemplazar'
+    ? 'Progreso restaurado: '+n+' checks'+extra
+    : 'Progreso fusionado: '+antes+' -> '+n+' checks'+extra);
+  return true;
+}
+function vistaRespaldo(){
+  return '<div class="wknav" style="margin:14px 0 6px">'+
+    '<button data-exportar="1">⭳ Guardar copia (descargar)</button>'+
+    '<button data-exportar-clip="1">⧉ Copiar al portapapeles</button>'+
+    '<button data-importar="1">⭱ Cargar desde fichero</button></div>'+
+    '<input type="file" id="fimport" accept="application/json,.json" class="no-print" style="display:none">'+
+    '<details class="no-print" style="margin-top:10px"><summary style="cursor:pointer;font-size:13px;color:var(--mute)">O pega aquí el progreso copiado (útil para moverlo entre móvil y ordenador)</summary>'+
+    '<textarea id="tpaste" rows="5" spellcheck="false" placeholder=\'{"app":"ruta-cyber",...}\' '+
+    'style="width:100%;margin-top:8px;padding:9px;background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:8px;font:12px var(--mono);resize:vertical"></textarea>'+
+    '<div class="wknav" style="margin-top:6px"><button data-aplicar="fusionar">Fusionar con lo actual (no pierde nada)</button>'+
+    '<button data-aplicar="reemplazar">Reemplazar todo</button></div></details>';
+}
+function st(n,l,c){ return '<div class="stat '+c+'"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
+
+function vistaHoy(){
+  const s = semanaActual(), q = trimestre(s), p = PLAN[s-1];
+  let h = '<div class="hero"><h1>¿<em>Qué hago</em> hoy?</h1><p>Un solo objetivo claro es mejor que una lista de veinte. Esta es tu semana '+s+' de 52.</p></div>';
+  h += '<div class="card" style="text-align:center;padding:34px 22px">'+
+    '<div class="hoy" style="text-align:left;display:block;max-width:640px;margin:0 auto">'+
+    '<div class="t" style="justify-content:center"><span class="sem">SEMANA '+String(s).padStart(2,'0')+' · '+q[0].toUpperCase()+'</span></div>'+
+    '<h4 style="font-size:23px;margin:6px 0 4px">'+p[0]+'</h4>'+
+    '<div style="color:var(--mute);font-size:14px">'+q[1]+'</div>'+
+    '<div class="hit" style="font-size:15px"><b>Entregable</b>'+p[1]+'</div></div></div>';
+  h += '<div class="card"><h3>Ajusta tu punto de partida</h3><div class="sub">Si empezaste hace semanas, ajústalo aquí.</div>'+
+    '<div class="wknav"><button data-w="-1">◀ Anterior</button><input type="number" id="wkin2" min="1" max="52" value="'+s+'"><button data-w="1">Siguiente ▶</button></div>'+
+    '<div class="wknav" style="margin-top:8px"><button data-reinicio="1">↺ Empezar el plan desde hoy (semana 1)</button></div></div>';
+  h += '<div class="card"><h3>Progreso por fase</h3><div class="sub">Marca los checkboxes dentro de cada capítulo. Se guardan solos.</div>';
+  for(let f=0;f<=4;f++){
+    const s = faseStats(f);
+    h += '<div class="fase-row z'+f+'" data-fase="'+f+'" style="cursor:pointer">'+
+      '<div class="nm">Fase '+f+'<small>'+NOMBRE_FASE[f]+'</small></div>'+
+      '<div class="bar"><i style="width:'+s.p+'%"></i></div>'+
+      '<div class="pc">'+s.p+'%</div></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function vistaLabs(){
+  let h = '<div class="hero"><h1>Checklist de <em>fases</em></h1><p>Los criterios de "he terminado esta fase cuando…". Marca cada casilla; el progreso se guarda automáticamente.</p></div>';
+  for(let f=0;f<=4;f++){
+    const s = faseStats(f);
+    const vs = VISTAS.filter(v=>v.fase===f);
+    h += '<div class="card"><h3>Fase '+f+' · '+NOMBRE_FASE[f]+' <span style="float:right;color:var(--cyan);font:800 13px var(--mono)">'+s.p+'%</span></h3>'+
+      '<div class="sub">'+s.h+' de '+s.t+' objetivos marcados</div><div class="bar" style="margin-bottom:16px"><i style="width:'+s.p+'%"></i></div>';
+    vs.forEach(v=>{
+      h += '<div style="margin:12px 0 0"><a class="navlink" href="#'+v.id+'" data-go="'+v.id+'" style="padding:8px 0">'+
+        '<span class="idx">›</span><span style="flex:1"><b style="color:var(--txt)">'+corta(v.titulo||'Prólogo',70)+'</b>'+
+        (v.horas||v.n?'<br><span style="font:600 11px var(--mono);color:var(--mute)">'+(v.horas?'≈ '+v.horas+' h · ':'')+v.n+' objetivos</span>':'')+'</span></a></div>';
+    });
+    h += '</div>';
+  }
+  return h;
+}
+
+function vistaCap(v){
+  return '<div class="vista" id="c-'+v.id+'">'+v.cuerpo+'</div>';
+}
+
+function pintar(){
+  let h = '';
+  if(E.vista==='inicio') h = vistaInicio();
+  else if(E.vista==='hoy') h = vistaHoy();
+  else if(E.vista==='labs') h = vistaLabs();
+  else if(BY[E.vista]) h = vistaCap(BY[E.vista]);
+  else h = vistaInicio();
+  app.innerHTML = h;
+  bindChecks();
+  renderSidebar();
+  wire();
+  if(BY[E.vista]) window.scrollTo(0,0);
+}
+function ir(id){ E.vista=id; save(); pintar(); }
+
+function bindChecks(){
+  app.querySelectorAll('input[data-task]').forEach(cb=>{
+    const id = cb.dataset.task;
+    cb.checked = !!E.tareas[id];
+    cb.addEventListener('change',()=>{
+      if(cb.checked){ E.tareas[id]=1; toast('✓ Objetivo completado'); }
+      else { delete E.tareas[id]; }
+      save(); renderSidebar();
+      if(E.vista==='labs'||E.vista==='inicio') pintar();
+    });
+  });
+}
+
+function wire(){
+  app.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();ir(a.dataset.go);}));
+  app.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    E.sem = Math.min(52, Math.max(1, semanaActual() + (+b.dataset.w))); save(); pintar();
+  }));
+  const ri = app.querySelector('[data-reinicio]');
+  if(ri) ri.addEventListener('click',()=>{ E.inicio=Date.now(); E.sem=1; save(); pintar(); toast('Plan reiniciado en la semana 1'); });
+  const rt = app.querySelector('[data-reset-todo]');
+  if(rt) rt.addEventListener('click',()=>{
+    if(!confirm('¿Borrar TODO tu progreso?\n\nSe quitarán los checks marcados, la fecha de inicio y la semana actual.\n\nNo se puede deshacer.')) return;
+    try{ localStorage.removeItem(K); }catch(e){}
+    E = {tareas:{}, tema:E.tema, vista:'inicio', sem:0, inicio:Date.now(), horas:{}};
+    save(); pintar(); toast('Progreso borrado. Empiezas de cero.');
+  });
+
+  const ex = app.querySelector('[data-exportar]');
+  if(ex) ex.addEventListener('click',()=>{
+    const n = Object.keys(E.tareas||{}).length;
+    if(!n && !E.sem){ toast('No hay nada que guardar todavía'); return; }
+    try{ descargar(paquete(), 'cyber-progreso-'+fechaCorta()+'.json'); toast('Copia descargada: '+n+' checks'); }
+    catch(e){ toast('Tu navegador bloqueó la descarga: usa "Copiar al portapapeles"'); }
+  });
+  const exc = app.querySelector('[data-exportar-clip]');
+  if(exc) exc.addEventListener('click',async()=>{
+    const txt = JSON.stringify(paquete());
+    const ta = app.querySelector('#tpaste');
+    try{
+      await navigator.clipboard.writeText(txt);
+      toast('Copiado. Pégalo en el otro dispositivo.');
+    }catch(e){
+      // clipboard bloqueado (permisos o file://): cae al textarea manual
+      if(ta){
+        ta.value = txt; ta.focus(); ta.select();
+        document.execCommand && document.execCommand('copy');
+        toast('Copiado al portapapeles (o selecciónalo y pulsa Ctrl+C)');
+      } else { toast('No se pudo copiar: usa "Guardar copia"'); }
+    }
+  });
+  const im = app.querySelector('[data-importar]');
+  const fi = app.querySelector('#fimport');
+  if(im && fi) im.addEventListener('click',()=>fi.click());
+  if(fi) fi.addEventListener('change',()=>{
+    const f = fi.files && fi.files[0];
+    if(!f) return;
+    const fr = new FileReader();
+    fr.onload = ()=>{
+      let paq; try{ paq = JSON.parse(fr.result); }catch(e){ toast('El fichero no es un JSON válido'); return; }
+      if(aplicarPaquete(paq,'fusionar')) fi.value = '';
+    };
+    fr.readAsText(f);
+  });
+  app.querySelectorAll('[data-aplicar]').forEach(b=>b.addEventListener('click',()=>{
+    const ta = app.querySelector('#tpaste');
+    if(!ta || !ta.value.trim()){ toast('Pega primero el progreso en el cuadro de texto'); return; }
+    let paq; try{ paq = JSON.parse(ta.value); }catch(e){ toast('El texto pegado no es un JSON válido'); return; }
+    if(aplicarPaquete(paq, b.dataset.aplicar)) ta.value = '';
+  }));
+  app.querySelectorAll('#wkin,#wkin2').forEach(i=>i.addEventListener('change',()=>{
+    E.sem = Math.min(52, Math.max(1, parseInt(i.value)||1)); save(); pintar();
+  }));
+  app.querySelectorAll('[data-fase]').forEach(r=>r.addEventListener('click',()=>{
+    const f = r.dataset.fase;
+    const vs = f === 'transversal' ? VISTAS.filter(v=>v.fase===null) : VISTAS.filter(v=>v.fase===+f);
+    if(vs.length) ir(vs[vs.length-1].id);
+  }));
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BÚSQUEDA
+   ════════════════════════════════════════════════════════════════ */
+function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function buscar(q){
+  q = norm(q.trim());
+  if(q.length < 2) return [];
+  const terms = q.split(/\s+/).filter(t=>t.length>1);
+  const out = [];
+  for(const v of VISTAS){
+    const t = norm(v.crudo);
+    const title = norm(v.titulo||'');
+    let score = 0, firstAt = -1;
+    for(const term of terms){
+      const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');
+      const nt = (title.match(re)||[]).length * 12;
+      const nb = (t.match(re)||[]).length;
+      if(!nb) score = -1;
+      if(score>=0){
+        score += nt + Math.min(nb,12);
+        const at = t.indexOf(term);
+        if(at>=0 && (firstAt<0||at<firstAt)) firstAt = at;
+      }
+    }
+    if(score>0) out.push({v, s:score, at:firstAt});
+  }
+  return out.sort((a,b)=>b.s-a.s).slice(0,40);
+}
+function snip(crudo, at, q){
+  const s = at<0?0:Math.max(0,at-110);
+  let frag = crudo.slice(s, s+290).replace(/[#*`>|]/g,' ').replace(/\s+/g,' ').trim();
+  const nq = norm(q.split(/\s+/)[0]||'');
+  let i = norm(frag).indexOf(nq);
+  if(i<0) i=0;
+  const ini = Math.max(0, i-70);
+  const out = frag.slice(ini, ini+240);
+  return (s>0?'… ':'') + out.replace(new RegExp('('+nq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','i'),'<mark>$1</mark>') + ' …';
+}
+function renderRes(q){
+  const r = buscar(q);
+  let h = '<div class="res"><div class="rescount">'+r.length+' resultado'+(r.length===1?'':'s')+' para “'+esc(q)+'”</div>';
+  if(!r.length) h += '<div class="card"><h3>Sin resultados</h3><div class="sub">Prueba con: ADCS, Kerberoasting, Kerberos, smuggling, Sigma, Volatility, PIV, AES, GOAD…</div></div>';
+  r.forEach(x=>{
+    h += '<button class="hitcard" data-go="'+x.v.id+'"><span class="loc">'+x.v.doc+' · '+(x.v.titulo||'Prólogo').slice(0,52)+'</span>'+
+      '<h5>'+corta(x.v.titulo||'Prólogo',70)+'</h5><p>'+snip(x.v.crudo, x.at, q)+'</p></button>';
+  });
+  h += '</div>';
+  app.innerHTML = h;
+  app.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{qEl.value='';$('#sw').classList.remove('has');ir(b.dataset.go);}));
+  renderSidebar();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CONTROLES
+   ════════════════════════════════════════════════════════════════ */
+const qEl = $('#q');
+let tmr;
+qEl.addEventListener('input',()=>{
+  $('#sw').classList.toggle('has', !!qEl.value);
+  clearTimeout(tmr);
+  tmr = setTimeout(()=>{
+    const v = qEl.value.trim();
+    if(v.length>=2) renderRes(v);
+    else pintar();
+  }, 190);
+});
+$('#qclr').addEventListener('click',()=>{ qEl.value=''; $('#sw').classList.remove('has'); qEl.focus(); pintar(); });
+$('#tema').addEventListener('click',()=>setTema(E.tema==='cyber'?'lector':'cyber'));
+function setTema(t){
+  E.tema=t; save();
+  document.documentElement.setAttribute('data-tema',t);
+  $('#tema').textContent = t==='cyber' ? '◐ LECTOR' : '◈ CYBER';
+  $('#tema').classList.toggle('on', t==='lector');
+}
+$('#reset').addEventListener('click',()=>{
+  if(!confirm('¿Borrar TODO el progreso (checkboxes y posición)?\n\nNo se puede deshacer.')) return;
+  E = {tareas:{}, tema:E.tema, vista:'inicio', sem:0, inicio:Date.now(), horas:{}};
+  save(); pintar(); toast('Progreso reiniciado');
+});
+$('#pdf').addEventListener('click',()=>{
+  toast('En el diálogo elige «Guardar como PDF»');
+  setTimeout(()=>window.print(), 400);
+});
+$('#menu').addEventListener('click',()=>$('#sb').classList.toggle('open'));
+document.addEventListener('keydown',e=>{
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+  if(e.key==='/' && !typing){ e.preventDefault(); qEl.focus(); qEl.select(); }
+  if(e.key==='Escape'){ if(document.activeElement===qEl){ qEl.value=''; $('#sw').classList.remove('has'); qEl.blur(); pintar(); } else $('#sb').classList.remove('open'); }
+  if((e.key==='t'||e.key==='T') && !typing) setTema(E.tema==='cyber'?'lector':'cyber');
+});
+function toast(m){
+  const t=$('#toast'); t.textContent=m; t.classList.add('on');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),1900);
+}
+window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(BY[h]) ir(h); });
+
+/* ════════════════════════════════════════════════════════════════
+   MODO IMPRESIÓN / PDF
+   ════════════════════════════════════════════════════════════════ */
+function modoImprimir(){
+  document.querySelector('.topbar').remove();
+  document.querySelector('.layout').remove();
+  const dc = $('#docall');
+  let h = '<div class="portada"><h1>RUTA CYBERSEGURIDAD<br>De Nivel 0 a Senior</h1>'+
+    '<p>Plan de estudio completo en 5 fases · 52 semanas · ≈2.700 horas · 3 documentos · labs, checklists y recursos.</p>'+
+    '<p style="margin-top:8px"><span class="tag">FASE 0 CIMIENTOS</span> <span class="tag">FASE 1 PRINCIPIANTE</span> <span class="tag">FASE 2 INTERMEDIO</span> <span class="tag">FASE 3 AVANZADO</span> <span class="tag">FASE 4 SENIOR</span></p>'+
+    '<p style="margin-top:10px;font-size:10pt;color:#555">Regla 30/50/20 — 30 % teoría, 50 % práctica, 20 % escritura. Todo el material es de uso educativo y de laboratorio autorizado.</p></div>';
+  h += '<div class="portada"><h1>Índice de capítulos</h1><p>Navegación por documento y fase.</p></div>';
+  h += '<ul style="font-size:10pt;line-height:1.7">';
+  const docs={}; VISTAS.forEach(v=>{(docs[v.doc]=docs[v.doc]||[]).push(v)});
+  for(const k in docs){ h += '<li style="margin-bottom:2pt"><b>'+k.toUpperCase()+'</b></li>';
+    docs[k].forEach(v=>{ h += '<li style="margin-left:14pt">'+esc(v.titulo||'Prólogo')+(v.n?' <span style="color:#777">('+v.n+' objetivos)</span>':'')+'</li>'; }); }
+  h += '</ul>';
+  h += '<div class="portada" style="page-break-before:always"><h1>Plan de 52 semanas</h1><p>15-20 h/semana · 13-15 h con la rutina base.</p></div>';
+  h += '<table style="font-size:8.5pt"><thead><tr><th style="width:8%">Sem</th><th style="width:12%">Trimestre</th><th>Foco</th><th style="width:32%">Entregable</th></tr></thead><tbody>';
+  PLAN.forEach((p,i)=>{ const q=trimestre(i+1);
+    h += '<tr><td><b>'+(i+1)+'</b></td><td>'+q[0]+'</td><td>'+esc(p[0])+'</td><td>'+esc(p[1])+'</td></tr>'; });
+  h += '</tbody></table>';
+  VISTAS.forEach(v=>{
+    const et = v.fase===null ? 'Transversal' : 'Fase '+v.fase;
+    h += '<div class="vista"><div class="phead"><b>'+esc(v.doc)+'</b>'+
+         '<span><span class="pf">'+et+'</span> · '+(v.n? v.n+' objetivos':'')+'</span></div>'+v.cuerpo+'</div>';
+  });
+  dc.innerHTML = h;
+}
+if(ES_IMPRIMIR) modoImprimir();
+else { setTema(E.tema||'cyber'); pintar(); }
+</script>
+</body>
+</html>
